@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.jayway.restassured.path.json.JsonPath;
 import com.jayway.restassured.path.xml.XmlPath;
 
 import br.com.caelum.leilao.modelo.Usuario;
@@ -24,6 +25,16 @@ public class UsuariosWSTest {
 
 		assertEquals(esperado1, usuarios.get(0));
 		assertEquals(esperado2, usuarios.get(1));
+	}
+	
+	@Test
+	public void  deveRetornarUsuarioPeloId(){
+		JsonPath path = given().parameter("usuario.id", 1).header("Accept", "application/json").get("/usuarios/show").andReturn().jsonPath();
+		
+		Usuario usuario = path.getObject("usuario", Usuario.class);
+		Usuario esperado = new Usuario(1L, "Mauricio Aniche", "mauricio.aniche@caelum.com.br");
+		
+		assertEquals(esperado, usuario);
 	}
 
 }
