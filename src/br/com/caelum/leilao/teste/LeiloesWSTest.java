@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.jayway.restassured.path.json.JsonPath;
+import com.jayway.restassured.path.xml.XmlPath;
 
 import br.com.caelum.leilao.modelo.Leilao;
 import br.com.caelum.leilao.modelo.Usuario;
@@ -34,6 +35,18 @@ public class LeiloesWSTest {
 		Leilao esperado = new Leilao(1L, "l1", 100.00, usuario, true);
 		
 		assertEquals(esperado.getId(), leilao.getId());					
+	}
+	
+	@Test
+	public void deveRetornarTotalDeLeiloesExistentes(){
+		XmlPath path = given()
+                .header("Accept", "application/xml")
+                .get("/leiloes/total")
+                .andReturn().xmlPath();
+
+        int total = path.getInt("int");
+
+        assertEquals(2, total);
 	}
 
 }
