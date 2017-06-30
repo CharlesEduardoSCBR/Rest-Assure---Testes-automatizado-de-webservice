@@ -36,5 +36,26 @@ public class UsuariosWSTest {
 		
 		assertEquals(esperado, usuario);
 	}
+	
+	@Test
+	public void deveAdicionarUmUsuario(){
+		Usuario u1 = new Usuario("charles", "c@c.c");
+		
+		XmlPath path = given()
+					   		.header("Accept", "application/xml")
+					   		.contentType("application/xml")
+					   		.body(u1)
+					   	.expect()
+					   		.statusCode(200)
+					   	.when()
+					   		.post("/usuarios")
+					   	.andReturn()
+					   		.xmlPath();
+		
+		Usuario resposta = path.getObject("usuario", Usuario.class);
+		
+		assertEquals("charles", resposta.getNome());
+		assertEquals("c@c.c", resposta.getEmail());
+	}
 
 }
