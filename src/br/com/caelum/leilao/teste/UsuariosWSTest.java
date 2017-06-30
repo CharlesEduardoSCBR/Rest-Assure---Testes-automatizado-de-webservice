@@ -39,7 +39,7 @@ public class UsuariosWSTest {
 	
 	@Test
 	public void deveAdicionarUmUsuario(){
-		Usuario u1 = new Usuario("charles", "c@c.c");
+		Usuario u1 = new Usuario(123L, "charles", "c@c.c");
 		
 		XmlPath path = given()
 					   		.header("Accept", "application/xml")
@@ -56,6 +56,16 @@ public class UsuariosWSTest {
 		
 		assertEquals("charles", resposta.getNome());
 		assertEquals("c@c.c", resposta.getEmail());
+		
+		given()
+				.contentType("application/xml")
+				.body(resposta)
+			.expect()
+				.statusCode(200)
+			.when()
+				.delete("usuarios/deleta")
+			.andReturn()
+				.asString();
+			
 	}
-
 }
