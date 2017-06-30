@@ -48,5 +48,35 @@ public class LeiloesWSTest {
 
         assertEquals(2, total);
 	}
-
+	
+	@Test
+	public void deveAdicionarUmLeilao(){
+		Leilao l1 = new Leilao(123L, "l1", 100.00, usuario, true);
+		
+		XmlPath path = given()
+					   		.header("Accept", "application/xml")
+					   		.contentType("application/xml")
+					   		.body(l1)
+					   	.expect()
+					   		.statusCode(200)
+					   	.when()
+					   		.post("/leiloes")
+					   	.andReturn()
+					   		.xmlPath();
+		
+		Leilao resposta = path.getObject("leilao", Leilao.class);
+		
+		assertEquals(l1, resposta);
+		
+		given()
+				.contentType("application/xml")
+				.body(resposta)
+			.expect()
+				.statusCode(200)
+			.when()
+				.delete("leiloes/deletar")
+			.andReturn()
+				.asString();
+		
+	}
 }
